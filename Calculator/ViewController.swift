@@ -9,49 +9,65 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
+
     @IBOutlet weak var displayLabel: UILabel!
-    
+
     private var isFinishTypingNumber: Bool = true
-    
+
     @IBAction func calcButtonPressed(_ sender: UIButton) {
-        
+
         //What should happen when a non-number button is pressed
         isFinishTypingNumber = true
-        
+
         guard let number = Double(displayLabel.text!) else {
             fatalError("Cannot convert display label text to a Double.")
         }
-        
+
         if let calMethod = sender.currentTitle {
             if calMethod == "+/-" {
                 displayLabel.text = String(number * -1)
-            }else if calMethod == "AC" {
+            } else if calMethod == "AC" {
                 displayLabel.text = String(0)
-            }else if calMethod == "%" {
+            } else if calMethod == "%" {
                 displayLabel.text = String(number / 100)
             }
         }
-    
+
     }
 
-    
     @IBAction func numButtonPressed(_ sender: UIButton) {
-        
+
         //What should happen when a number is entered into the keypad
-        
+
         if let numValue = sender.currentTitle {
-            
+
             if isFinishTypingNumber {
                 displayLabel.text = numValue
                 isFinishTypingNumber = false
-            }else  {
+            } else {
+                if (numValue == "." && displayLabel.text == nil) || displayLabel.text!.contains(".") {
+                    return
+                }
+                
+                guard let currentDisplayValue = Double(displayLabel.text!)
+                else {
+                    fatalError("Cannot conver display label text to a Double!")
+                }
+
+                if numValue == "." {
+                    let isInt =
+                        floor(Double(currentDisplayValue))
+                        == currentDisplayValue
+
+                    if !isInt {
+                        return
+                    }
+                }
                 displayLabel.text = displayLabel.text! + numValue
 
             }
         }
-    
+
     }
 
 }
-

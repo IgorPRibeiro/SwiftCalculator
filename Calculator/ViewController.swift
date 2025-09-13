@@ -14,22 +14,32 @@ class ViewController: UIViewController {
 
     private var isFinishTypingNumber: Bool = true
 
+    private var displayValue: Double {
+        get {
+            guard let number = Double(displayLabel.text!) else {
+                fatalError("Cannot convert display label text to a Double.")
+            }
+            return number
+        }
+        set {
+            displayLabel.text = String(newValue)
+        }
+    }
+
     @IBAction func calcButtonPressed(_ sender: UIButton) {
 
         //What should happen when a non-number button is pressed
         isFinishTypingNumber = true
 
-        guard let number = Double(displayLabel.text!) else {
-            fatalError("Cannot convert display label text to a Double.")
-        }
+ 
 
         if let calMethod = sender.currentTitle {
             if calMethod == "+/-" {
-                displayLabel.text = String(number * -1)
+                displayValue *= displayValue * -1
             } else if calMethod == "AC" {
-                displayLabel.text = String(0)
+                displayValue = 0
             } else if calMethod == "%" {
-                displayLabel.text = String(number / 100)
+                displayValue *= 0.01
             }
         }
 
@@ -40,32 +50,27 @@ class ViewController: UIViewController {
         //What should happen when a number is entered into the keypad
 
         if let numValue = sender.currentTitle {
-            
+
             if isFinishTypingNumber {
-                
-                if (numValue == "." && displayLabel.text == "0") {
+
+                if numValue == "." && displayLabel.text == "0" {
                     displayLabel.text = displayLabel.text! + numValue
                     isFinishTypingNumber = false
                     return
                 }
-                
+
                 displayLabel.text = numValue
                 isFinishTypingNumber = false
             } else {
 
-                if ( displayLabel.text!.contains(".") && numValue == ".") {
+                if displayLabel.text!.contains(".") && numValue == "." {
                     return
-                }
-                
-                guard let currentDisplayValue = Double(displayLabel.text!)
-                else {
-                    fatalError("Cannot conver display label text to a Double!")
                 }
 
                 if numValue == "." {
                     let isInt =
-                        floor(Double(currentDisplayValue))
-                        == currentDisplayValue
+                        floor(Double(displayValue))
+                        == displayValue
 
                     if !isInt {
                         return

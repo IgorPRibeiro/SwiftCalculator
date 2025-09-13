@@ -23,6 +23,11 @@ class ViewController: UIViewController {
             fatalError("Cannot convert display label text to a Double.")
         }
         
+        if let calMethod = sender.currentTitle {
+            if calMethod == "+/-" {
+                displayLabel.text = String(number * -1.0)
+            }
+        }
     
     }
 

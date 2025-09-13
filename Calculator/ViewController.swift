@@ -25,7 +25,11 @@ class ViewController: UIViewController {
         
         if let calMethod = sender.currentTitle {
             if calMethod == "+/-" {
-                displayLabel.text = String(number * -1.0)
+                displayLabel.text = String(number * -1)
+            }else if calMethod == "AC" {
+                displayLabel.text = String(0)
+            }else if calMethod == "%" {
+                displayLabel.text = String(number / 100)
             }
         }
     
